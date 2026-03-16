@@ -1,4 +1,29 @@
 .main-view {
 
-background-color = red;
+background-color : red;
+}
+
+.main-view::part(drawer){
+    background-color: #1e293b;
+    color: white;
+    width: 40px;
+    width
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 8px 0 6px;
+}
+
+.header-burger {
+    width: 36px;
+    height: 36px;
+}
+
+.header-clock {
+    margin-left: auto;
+    font-size: 14px;
+    text-align: right;
 }
