@@ -1,70 +1,39 @@
+@import "./grammar-check-tab.css";
+
 .main-view {
+
+    background: radial-gradient(circle at top, #1f2a48, #0f172a);
+    height: 100vh;
 }
 
 .main-view::part(drawer){
-    color: white;
-    width: 100px;
-    }
+
+    color: #cbd5f5;
+    width: 180px;
+    background: linear-gradient(180deg, #2a3b6a, #1e2a4a);
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
 
 .header {
+
     display: flex;
     align-items: center;
     width: 100%;
-    margin: 0 8px 0 6px;
+    padding: 10px 16px;
 }
 
 .header-burger {
+
     width: 36px;
     height: 36px;
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 .header-clock {
+
     margin-left: auto;
     font-size: 14px;
-    text-align: right;
-}
-
-.tab1 {
-
-    width: 100%;
-    height: 100%;
-    background-color: #1E1E2F;
-
-    .tab1-content{
-        margin: 10%;
-        max-width: 75%;
-        min-height: 55%;
-        border: 1px solid #5994DE;
-        border-radius: 12px;
-        background-color: #E0DFCA;
-    }
-
-    .tab1-span {
-        font-size: 36px;
-        font-weight: bold;
-    }
-
-    .tab1-text-area{
-              min-width: 100%;
-              min-height: 50%;
-    }
-
-    .tab1-text-area::part(input-field) {
-          white-space: pre-wrap;
-          overflow-wrap: break-word;
-          background-color: #59A7DE;
-    }
-
-    .tab1-button {
-        border-radius:12px;
-        font-size: 16px;
-        cursor: pointer;
-        background-color: #4963E0;
-        color: white;
-    }
-
-    .tab1-button:hover {
-        transform: scale(1.08);
-        background-color: #2A09E0;
-    }
+    color: #facc15;
+    font-weight: 500;
 }

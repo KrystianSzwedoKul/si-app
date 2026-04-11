@@ -7,46 +7,45 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
 
-@Route(value = "/tab1", layout = MainView.class)
-public class Tab1 extends VerticalLayout {
+@Route(value = "/grammar-check-tab", layout = MainView.class)
+public class GrammarCheckTab extends VerticalLayout {
 
-    public Tab1() {
+    public GrammarCheckTab() {
 
         try {
             buildUI();
         } catch (Exception e) {
-            System.out.println("[Tab1] Error while build UI.");
+            System.out.println("[GrammarCheckTab] Error while build UI.");
         }
     }
 
     private void buildUI() {
 
-        addClassName("tab1");
+        addClassName("grammar-check-tab");
         VerticalLayout content = new VerticalLayout();
-        content.addClassName("tab1-content");
+        content.addClassName("grammar-check-tab-content");
 
         Span info = new Span("Sprawdź gramatykę zdania");
-        info.addClassName("tab1-span");
+        info.addClassName("grammar-check-tab-span");
 
         ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.addClassName("tab1-span");
+        comboBox.addClassName("grammar-check-tab-span");
         List<String> languages = List.of("Polski", "Angielski", "Niemiecki");
         comboBox.setItems(languages);
         comboBox.setPlaceholder("Wybierz język:");
 
         TextArea text = new TextArea("");
-        text.addClassName("tab1-text-area");
+        text.addClassName("grammar-check-tab-text-area");
         text.setPlaceholder("Wpisz zdanie do sprawdzenia...");
 
         Button button = new Button("Sprawdz",
                 VaadinIcon.AIRPLANE.create());
-        button.addClassName("clen");
+        button.addClassName("grammar-check-tab-check-button");
 
         content.add(info, comboBox, text,button);
         add(content);

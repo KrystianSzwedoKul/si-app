@@ -1,5 +1,7 @@
 package com.si.ui;
 
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -33,23 +35,18 @@ public class Header extends HorizontalLayout {
                 .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         clock.addClassName("header-clock");
         add(burger, clock);
-        startClock();
     }
 
-    private void startClock() {
 
-        new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000);
-                    getUI().ifPresent(ui -> {
-                        ui.access(() -> clock.setText(LocalDateTime.now()
-                                .format(DateTimeFormatter.ofPattern("HH:mm:ss"))));
-                    });
-                } catch (InterruptedException e) {
-                    System.out.println("[Header] Error while updating time. " + e);
-                }
-            }
-        }).start();
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+
+        UI ui = attachEvent.getUI();
+        ui.setPollInterval(1000);
+
+        ui.addPollListener(e -> {
+            clock.setText(LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        });
     }
 }

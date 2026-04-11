@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.3</version>
+		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.si</groupId>
 	<artifactId>si-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>si-app</name>
 	<description>Demo project for Spring Boot</description>
@@ -23,6 +23,7 @@
 	</developers>
     <modules>
         <module>frontend</module>
+        <module>backend</module>
     </modules>
     <scm>
 		<connection/>
