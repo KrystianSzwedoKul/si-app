@@ -1,7 +1,7 @@
 package com.si;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +15,10 @@ public class GeminiController {
         this.service = service;
     }
 
-    @GetMapping("/")
-    public String  getMessage() {
+    @GetMapping("/{language}/{sentence}")
+    public GeminiResult  getMessage(@PathVariable("language") String language,
+                                    @PathVariable("sentence") String sentence) {
 
-        return service.getMessage();
+        return service.getMessage(language,sentence);
     }
 }
