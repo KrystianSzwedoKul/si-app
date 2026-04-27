@@ -1,6 +1,8 @@
 package com.si.ui.tab;
 
 import com.si.MainView;
+import com.si.config.ApplicationContext;
+import com.si.servis.WebService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Span;
@@ -46,8 +48,14 @@ public class GrammarCheckTab extends VerticalLayout {
         Button button = new Button("Sprawdz",
                 VaadinIcon.AIRPLANE.create());
         button.addClassName("grammar-check-tab-check-button");
+        button.addClickListener(e -> {
+            String language = comboBox.getValue();
+            String sentence = text.getValue();
 
-        content.add(info, comboBox, text,button);
+            WebService webService = ApplicationContext.getBean(WebService.class);
+            webService.isValidSentence(language, sentence);
+        });
+        content.add(info, comboBox, text, button);
         add(content);
     }
 }
