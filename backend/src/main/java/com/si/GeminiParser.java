@@ -17,7 +17,6 @@ public class GeminiParser {
         String text = root.path("candidates")
                 .get(0)
                 .path("content")
-                .get(0)
                 .path("parts")
                 .get(0)
                 .path("text")

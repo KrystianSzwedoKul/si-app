@@ -4,6 +4,9 @@ public class GeminiResult {
     private String isCorrect;
     private String correctSentence;
 
+    public GeminiResult() {
+    }
+
     public GeminiResult(String correctSentence, String isCorrect) {
         this.correctSentence = correctSentence;
         this.isCorrect = isCorrect;

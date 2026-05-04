@@ -13,7 +13,7 @@ public class GeminiService {
     private final HttpClient client;
     private final GeminiParser parser;
     private final String API_KEY = "AIzaSyD5KlHZlJqq3S2VvNPeAYO1Cs3trodiE58";
-    private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY;
+    private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=" + API_KEY;
 
     public GeminiService(HttpClient client, GeminiParser parser) {
         this.client = client;
@@ -52,6 +52,6 @@ public class GeminiService {
             System.out.println("Błąd podczas komunuikacji z api");
         }
 
-        return new GeminiResult(language, sentence);
+        return new GeminiResult(sentence, language);
     }
 }

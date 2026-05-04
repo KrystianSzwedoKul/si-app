@@ -7,11 +7,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Route(value = "/grammar-check-tab", layout = MainView.class)
@@ -53,7 +55,19 @@ public class GrammarCheckTab extends VerticalLayout {
             String sentence = text.getValue();
 
             WebService webService = ApplicationContext.getBean(WebService.class);
-            webService.isValidSentence(language, sentence);
+            Map<String, String> result = webService.isValidSentence(language, sentence);
+
+            String message = "";
+            if (result.get("isCorrect").equals("Yes")) {
+                message = "Zdanie jest poprawne";
+            } else if (result.get("isCorrect").equals("No")) {
+                message = "Zdanie jest nie poprawne. Poprawna forma to: " + result.get("correctSentence");
+            } else {
+                message = " Błąd seerwera";
+            }
+            Notification notification = new Notification(message, 3000);
+            notification.setPosition(Notification.Position.BOTTOM_CENTER);
+            notification.open();
         });
         content.add(info, comboBox, text, button);
         add(content);
