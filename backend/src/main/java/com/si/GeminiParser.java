@@ -12,19 +12,35 @@ public class GeminiParser {
     public GeminiResult parse(String json) throws JsonProcessingException {
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(json);
 
-        String text = root.path("candidates")
+        String text = getText(json).replace("```json", "")
+                .replace("```", "")
+                .trim();
+
+        return mapper.readValue(text, GeminiResult.class);
+    }
+
+    public ImageResponse paresImageResponse(String json) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String text = getText(json).replace("```json", "")
+                .replace("```", "")
+                .trim();
+
+        return mapper.readValue(text, ImageResponse.class);
+    }
+
+    private String getText(String json) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(json);
+        return root.path("candidates")
                 .get(0)
                 .path("content")
                 .path("parts")
                 .get(0)
                 .path("text")
                 .asText();
-        text = text.replace("```json", "")
-                .replace("```", "")
-                .trim();
-
-        return mapper.readValue(text, GeminiResult.class);
     }
 }

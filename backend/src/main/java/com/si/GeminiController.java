@@ -1,9 +1,6 @@
 package com.si;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/gemini/")
@@ -21,4 +18,11 @@ public class GeminiController {
 
         return service.getMessage(language,sentence);
     }
+
+    @PostMapping("/")
+    public Boolean isValid(@RequestBody ImageRequest request) {
+
+        return service.isCorrect(request.getImage(), request.getNumber());
+    }
+
 }

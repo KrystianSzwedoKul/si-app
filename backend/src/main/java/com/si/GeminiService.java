@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Base64;
 
 @Service
 public class GeminiService {
@@ -14,6 +15,8 @@ public class GeminiService {
     private final GeminiParser parser;
     private final String API_KEY = "AIzaSyD5KlHZlJqq3S2VvNPeAYO1Cs3trodiE58";
     private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=" + API_KEY;
+    private final String TEXT_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=" + API_KEY;
+    private final String IMAGE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY;
 
     public GeminiService(HttpClient client, GeminiParser parser) {
         this.client = client;
@@ -38,7 +41,7 @@ public class GeminiService {
                         """.formatted(language, sentence);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
+                .uri(URI.create(TEXT_API_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                 .build();
@@ -53,5 +56,48 @@ public class GeminiService {
         }
 
         return new GeminiResult(sentence, language);
+    }
+
+    public Boolean isCorrect(byte[] image, String number) {
+
+
+        String base64Image = Base64.getEncoder().encodeToString(image);
+        String jsonPayload =
+                """
+                        {
+                          "contents": [
+                            {
+                              "parts": [
+                                {
+                                  "text": "Sprawdź czy na zdjęciu znajduje się tablica rejestracyjna: %s. Zwróć odpowiedź wyłącznie w formacie JSON: { 'found':true/false, 'detected_plate' : 'numer lub null'} Jeśli nie jesteś pewny - ustaw found=false;"
+                                },
+                                {
+                                    "inline_data" : {
+                                        "mime_type" : "image/jpeg",
+                                        "data" : "%s"
+                                    }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                        """.formatted(number, base64Image);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(IMAGE_API_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            if (response.statusCode() == 200) {
+                ImageResponse imageResponse = parser.paresImageResponse(response.body());
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
