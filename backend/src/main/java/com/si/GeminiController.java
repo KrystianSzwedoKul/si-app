@@ -20,7 +20,7 @@ public class GeminiController {
     }
 
     @PostMapping("/")
-    public Boolean isValid(@RequestBody ImageRequest request) {
+    public ImageResponse isValid(@RequestBody ImageRequest request) {
 
         return service.isCorrect(request.getImage(), request.getNumber());
     }

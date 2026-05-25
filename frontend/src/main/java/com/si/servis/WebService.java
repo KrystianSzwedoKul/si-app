@@ -28,17 +28,17 @@ public class WebService {
         return map;
     }
 
-    public boolean isValidNumber(String number, byte[] image) {
+    public ImageResponse isValidNumber(String number, byte[] image) {
 
         Map<String, Object> body = new HashMap<>();
         body.put("number", number);
         body.put("image", image);
 
-        Boolean result = config.post()
+        ImageResponse result = config.post()
                 .uri("/api/v1/gemini/")
                 .bodyValue(body)
                 .retrieve()
-                .bodyToFlux(Boolean.class)
+                .bodyToFlux(ImageResponse.class)
                 .blockFirst();
         return result;
     }

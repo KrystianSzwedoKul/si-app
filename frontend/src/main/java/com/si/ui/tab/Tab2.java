@@ -2,8 +2,10 @@ package com.si.ui.tab;
 
 import com.si.MainView;
 import com.si.config.ApplicationContext;
+import com.si.servis.ImageResponse;
 import com.si.servis.WebService;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -12,11 +14,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 
 @Route(value = "/tab2", layout = MainView.class)
 public class Tab2 extends VerticalLayout {
 
+    Image image = new Image();
     Button button = new Button("Sprawdź");
     MemoryBuffer memoryBuffer = new MemoryBuffer();
     TextField textField = new TextField();
@@ -33,6 +40,7 @@ public class Tab2 extends VerticalLayout {
 
     private void buildUI() {
 
+        HorizontalLayout mainLayout = new HorizontalLayout();
         VerticalLayout content = new VerticalLayout();
         content.addClassName("content-tab2");
         Span description = new Span("Prześlij zdjecie: ");
@@ -47,10 +55,10 @@ public class Tab2 extends VerticalLayout {
                 String number = textField.getValue();
                 byte[] image = memoryBuffer.getInputStream().readAllBytes();
                 WebService webService = ApplicationContext.getBean(WebService.class);
-                boolean result = webService.isValidNumber(number, image);
+                ImageResponse result = webService.isValidNumber(number, image);
 
                 String message;
-                if (result == true) {
+                if (result.isFound()) {
                     message = "Rozpoznano tablice";
                 } else {
                     message = "Nie rozpoznano";
@@ -65,17 +73,37 @@ public class Tab2 extends VerticalLayout {
             enabledButton();
         });
         upload.addSucceededListener(e -> {
+
+            try {
+                byte[] bytes = memoryBuffer.getInputStream().readAllBytes();
+                StreamResource resource = new StreamResource(
+                        memoryBuffer.getFileName(),
+                        () -> new ByteArrayInputStream(bytes)
+                );
+                image.setSrc(resource);
+                image.setHeight("550px");
+                image.setWidth("550px");
+                enabledButton();
+            } catch (IOException ex) {
+
+            }
+        });
+        upload.addFileRemovedListener(event->{
+
+            memoryBuffer = new MemoryBuffer();
+            upload.setReceiver(memoryBuffer);
             enabledButton();
         });
         button.setEnabled(false);
         layout.add(textField, button);
 
         content.add(description, upload, layout);
-        add(content);
+        mainLayout.add(content, image);
+        add(mainLayout);
     }
 
     private void enabledButton() {
 
-        button.setEnabled(!textField.isEmpty() && memoryBuffer.getFileName() != null);
+        button.setEnabled(!textField.isEmpty() && memoryBuffer.getFileData() != null);
     }
 }

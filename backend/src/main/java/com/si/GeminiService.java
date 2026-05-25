@@ -58,8 +58,7 @@ public class GeminiService {
         return new GeminiResult(sentence, language);
     }
 
-    public Boolean isCorrect(byte[] image, String number) {
-
+    public ImageResponse isCorrect(byte[] image, String number) {
 
         String base64Image = Base64.getEncoder().encodeToString(image);
         String jsonPayload =
@@ -93,11 +92,10 @@ public class GeminiService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());
             if (response.statusCode() == 200) {
-                ImageResponse imageResponse = parser.paresImageResponse(response.body());
+                return parser.paresImageResponse(response.body());
             }
-            return true;
         } catch (Exception e) {
-            return false;
         }
+        return new ImageResponse(false, "Błąd.");
     }
 }
